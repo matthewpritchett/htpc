@@ -62,7 +62,7 @@ echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils
 install -m 600 -o root -g root ./etc/samba/media /etc/samba
-read -r -p "Enter the password for mediaserver network share: " mediaPassword
+read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
 replace_text "/etc/samba/media" "MEDIAPASSWORD" "$mediaPassword"
 mkdir /vault/containers
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.mount /etc/systemd/system

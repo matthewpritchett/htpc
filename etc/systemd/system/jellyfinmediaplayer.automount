@@ -1,5 +1,5 @@
 [Unit]
-Description=Jellyfin Media Player Auto-Mount
+Description=Jellyfin Media Player Automount
 
 [Automount]
 Where=/vault/containers
