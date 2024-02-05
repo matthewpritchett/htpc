@@ -83,7 +83,7 @@ systemctl enable --now jellyfinmediaplayer-updater.service
 DEBIAN_FRONTEND=noninteractive apt -yqq install cage pulseaudio
 install -m 644 -o root -g root ./etc/pam.d/jellyfinmediaplayer /etc/pam.d
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.service /etc/systemd/system
-systemctl enable jellyfinmediaplayer-updater.service
+systemctl enable jellyfinmediaplayer.service
 systemctl set-default graphical.target
 echo ""
 echo ""
