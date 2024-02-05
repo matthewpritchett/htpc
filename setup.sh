@@ -88,6 +88,7 @@ systemctl set-default graphical.target
 echo ""
 echo ""
 
+read -n 1 -s -r -p "Press any key to reboot"
 echo "=================="
 echo "Rebooting"
 echo "=================="
