@@ -1,10 +1,8 @@
 [Unit]
 Description=Jellyfin Media Player Auto-Mount
-Requires=network-online.target
 
 [Automount]
 Where=/vault/containers
-TimeoutIdleSec=0
 
 [Install]
 WantedBy=multi-user.target

@@ -75,6 +75,7 @@ systemctl daemon-reload
 systemctl enable --now jellyfinmediaplayer.automount
 
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.service /etc/systemd/system
+install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.timer /etc/systemd/system
 systemctl daemon-reload
 systemctl enable --now jellyfinmediaplayer-updater.service
 
