@@ -74,6 +74,7 @@ install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.automoun
 systemctl daemon-reload
 systemctl enable --now jellyfinmediaplayer.automount
 
+DEBIAN_FRONTEND=noninteractive apt -yqq install curl
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.service /etc/systemd/system
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.timer /etc/systemd/system
 systemctl daemon-reload
