@@ -27,8 +27,7 @@ echo "Setting up cockpit"
 echo "=================="
 echo ""
 echo ""
-DEBIAN_FRONTEND=noninteractive apt -yqq install avahi-daemon
-DEBIAN_FRONTEND=noninteractive apt -yqq install cockpit
+DEBIAN_FRONTEND=noninteractive apt -yqq install avahi-daemon cockpit tuned
 systemctl unmask cockpit
 systemctl enable cockpit
 systemctl start cockpit
@@ -74,7 +73,8 @@ install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.automoun
 systemctl daemon-reload
 systemctl enable --now jellyfinmediaplayer.automount
 
-DEBIAN_FRONTEND=noninteractive apt -yqq install curl
+DEBIAN_FRONTEND=noninteractive apt -yqq install wget curl
+install -m 755 -o root -g root ./usr/local/bin/update-jellyfinmediaplayer.sh /usr/local/bin
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.service /etc/systemd/system
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.timer /etc/systemd/system
 systemctl daemon-reload
