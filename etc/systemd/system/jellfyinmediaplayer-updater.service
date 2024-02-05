@@ -1,0 +1,14 @@
+[Unit]
+Description=Jellyfin Media Player Updater
+# Don't run if the file doesn't exist
+ConditionPathExists=!/vault/containers/%i/no-update
+# Wait until after network is up
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'curl -s https//api.github.com/repos/jellyfin/jellyfin-media-player/release/latest | grep "browser_download_url.*bookworm.deb" | cut -  -f 2,3 | tr -d \" | wget -q -i - -O jellyfin-mediaplayer.deb'
+
+[Install]
+WantedBy=multi-user.target
