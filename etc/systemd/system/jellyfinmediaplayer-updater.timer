@@ -2,7 +2,7 @@
 Description=Jellyfin Media Player Updater
 
 [Timer]
-OnCalendar=*-*-1 00:00:00
+OnCalendar=*-*-5 00:00:00
 Persistent=true
 
 [Install]
