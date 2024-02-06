@@ -3,6 +3,7 @@ Description=Jellyfin Media Player Automount
 
 [Automount]
 Where=/vault/containers
+TimeoutIdleSec=0
 
 [Install]
 WantedBy=multi-user.target

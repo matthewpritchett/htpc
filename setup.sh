@@ -50,9 +50,12 @@ echo "=================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install wget libnss3-tools
-wget -q -i https://github.com/matthewpritchett/mediaserver/releases/download/1.0.0/root.crt -O /usr/local/share/ca-certificates/mediaserver.crt
-/usr/sbin/update-ca-certificates
-certutil -d sql:$HOME/.pki/nssdb -A -t "CP,CP," -n mediaserver -i /usr/local/share/ca-certificates/mediaserver.crt
+if [ ! -f /usr/local/share/ca-certificates/mediaserver.crt ]
+then
+    wget -q -i https://github.com/matthewpritchett/mediaserver/releases/download/1.0.0/root.crt -O /usr/local/share/ca-certificates/mediaserver.crt
+    update-ca-certificates
+    certutil -d sql:$HOME/.pki/nssdb -A -t "CP,CP," -n mediaserver -i /usr/local/share/ca-certificates/mediaserver.crt
+fi
 echo ""
 echo ""
 
@@ -61,17 +64,20 @@ echo "=================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils
-install -m 600 -o root -g root ./etc/samba/media /etc/samba
-read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
-replace_text "/etc/samba/media" "MEDIAPASSWORD" "$mediaPassword"
-mkdir /vault/containers
-install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.mount /etc/systemd/system
+if [ ! -f /etc/samba/media ]
+then
+    install -m 600 -o root -g root ./etc/samba/media /etc/samba
+    read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
+    replace_text "/etc/samba/media" "MEDIAPASSWORD" "$mediaPassword"
+fi
+mkdir -p /vault/containers
+install -m 644 -o root -g root ./etc/systemd/system/vault-containers.mount /etc/systemd/system
 systemctl daemon-reload
-systemctl enable --now jellyfinmediaplayer.mount
+systemctl enable --now vault-containers.mount
 
-install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.automount /etc/systemd/system
+install -m 644 -o root -g root ./etc/systemd/system/vault-containers.automount /etc/systemd/system
 systemctl daemon-reload
-systemctl enable --now jellyfinmediaplayer.automount
+systemctl enable --now vault-containers.automount
 
 DEBIAN_FRONTEND=noninteractive apt -yqq install wget curl
 install -m 755 -o root -g root ./usr/local/bin/update-jellyfinmediaplayer.sh /usr/local/bin
@@ -80,7 +86,7 @@ install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.
 systemctl daemon-reload
 systemctl enable --now jellyfinmediaplayer-updater.service
 
-DEBIAN_FRONTEND=noninteractive apt -yqq install cage pulseaudio
+DEBIAN_FRONTEND=noninteractive apt -yqq install cage xwayland pulseaudio
 install -m 644 -o root -g root ./etc/pam.d/jellyfinmediaplayer /etc/pam.d
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.service /etc/systemd/system
 systemctl enable jellyfinmediaplayer.service
