@@ -64,11 +64,11 @@ echo "=================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils
-if [ ! -f /etc/samba/media ]
+if [ ! -f /root/.smbcredentials_vault_containers ]
 then
-    install -m 600 -o root -g root ./etc/samba/media /etc/samba
+    install -m 600 -o root -g root ./root/.smbcredentials_vault_containers /root
     read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
-    replace_text "/etc/samba/media" "MEDIAPASSWORD" "$mediaPassword"
+    replace_text "/root/.smbcredentials_vault_containers" "MEDIAPASSWORD" "$mediaPassword"
 fi
 mkdir -p /vault/containers
 install -m 644 -o root -g root ./etc/systemd/system/vault-containers.mount /etc/systemd/system
