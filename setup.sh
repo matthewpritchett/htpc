@@ -51,7 +51,7 @@ DEBIAN_FRONTEND=noninteractive apt -yqq install interception-tools interception-
 install -m 755 -o root -g root ./usr/bin/hideaway /usr/bin
 install -m 644 -o root -g root ./etc/interception/udevmon.d/config.yaml /etc/interception/udevmon.d
 systemctl restart udevmon
-mv /usr/share/icons/Adwaita/cursors/left_ptr /usr/share/icons/Adwaita/cursors/left_ptr.bak
+install -m 644 -o root -g root ./usr/share/icons/transparent/cursors/left_ptr /usr/share/icons/Adwaita/cursors
 echo ""
 echo ""
 
