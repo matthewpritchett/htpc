@@ -43,6 +43,38 @@ systemctl start cockpit
 echo ""
 echo ""
 
+echo "Setting up jellyfin media player"
+echo "=================="
+echo ""
+echo ""
+DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils wget
+install -m 600 -o root -g root ./root/.smbcredentials_vault_containers /root
+read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
+replace_text "/root/.smbcredentials_vault_containers" "MEDIAPASSWORD" "$mediaPassword"
+mkdir -p /vault/containers
+install -m 644 -o root -g root ./etc/systemd/system/vault-containers.mount /etc/systemd/system
+systemctl daemon-reload
+systemctl enable --now vault-containers.mount
+
+install -m 644 -o root -g root ./etc/systemd/system/vault-containers.automount /etc/systemd/system
+systemctl daemon-reload
+systemctl enable vault-containers.automount
+
+DEBIAN_FRONTEND=noninteractive apt -yqq install wget curl
+install -m 755 -o root -g root ./usr/local/bin/update-jellyfinmediaplayer.sh /usr/local/bin
+install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.service /etc/systemd/system
+install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.timer /etc/systemd/system
+systemctl daemon-reload
+systemctl enable --now jellyfinmediaplayer-updater.service
+
+DEBIAN_FRONTEND=noninteractive apt -yqq install cage xwayland pulseaudio
+install -m 644 -o root -g root ./etc/pam.d/jellyfinmediaplayer /etc/pam.d
+install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.service /etc/systemd/system
+systemctl enable jellyfinmediaplayer.service
+systemctl set-default graphical.target
+echo ""
+echo ""
+
 echo "Setting up automatic mouse hiding"
 echo "=================="
 echo ""
@@ -60,44 +92,9 @@ echo "=================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install wget libnss3-tools
-if [ ! -f /usr/local/share/ca-certificates/mediaserver.crt ]
-then
-    wget -q -i https://github.com/matthewpritchett/mediaserver/releases/download/1.0.0/root.crt -O /usr/local/share/ca-certificates/mediaserver.crt
-    update-ca-certificates
-    certutil -d sql:$HOME/.pki/nssdb -A -t "CP,CP," -n mediaserver -i /usr/local/share/ca-certificates/mediaserver.crt
-fi
-echo ""
-echo ""
-
-echo "Setting up jellyfin media player"
-echo "=================="
-echo ""
-echo ""
-DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils
-install -m 600 -o root -g root ./root/.smbcredentials_vault_containers /root
-read -r -p "Enter the password for mediaserver network share: " -s mediaPassword
-replace_text "/root/.smbcredentials_vault_containers" "MEDIAPASSWORD" "$mediaPassword"
-mkdir -p /vault/containers
-install -m 644 -o root -g root ./etc/systemd/system/vault-containers.mount /etc/systemd/system
-systemctl daemon-reload
-systemctl enable --now vault-containers.mount
-
-install -m 644 -o root -g root ./etc/systemd/system/vault-containers.automount /etc/systemd/system
-systemctl daemon-reload
-systemctl enable --now vault-containers.automount
-
-DEBIAN_FRONTEND=noninteractive apt -yqq install wget curl
-install -m 755 -o root -g root ./usr/local/bin/update-jellyfinmediaplayer.sh /usr/local/bin
-install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.service /etc/systemd/system
-install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer-updater.timer /etc/systemd/system
-systemctl daemon-reload
-systemctl enable --now jellyfinmediaplayer-updater.service
-
-DEBIAN_FRONTEND=noninteractive apt -yqq install cage xwayland pulseaudio
-install -m 644 -o root -g root ./etc/pam.d/jellyfinmediaplayer /etc/pam.d
-install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.service /etc/systemd/system
-systemctl enable jellyfinmediaplayer.service
-systemctl set-default graphical.target
+wget -q -i https://github.com/matthewpritchett/mediaserver/releases/download/1.0.0/root.crt -O /usr/local/share/ca-certificates/mediaserver.crt
+update-ca-certificates
+certutil -d sql:$HOME/.pki/nssdb -A -t "CP,CP," -n mediaserver -i /usr/local/share/ca-certificates/mediaserver.crt
 echo ""
 echo ""
 
