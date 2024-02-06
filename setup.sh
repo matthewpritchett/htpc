@@ -23,11 +23,20 @@ dpkg-reconfigure -f noninteractive unattended-upgrades
 echo ""
 echo ""
 
+echo "Setting up mDNS"
+echo "=================="
+echo ""
+echo ""
+DEBIAN_FRONTEND=noninteractive apt -yqq install avahi-daemon
+systemctl enable --now avahi-daemon.service
+echo ""
+echo ""
+
 echo "Setting up cockpit"
 echo "=================="
 echo ""
 echo ""
-DEBIAN_FRONTEND=noninteractive apt -yqq install avahi-daemon cockpit tuned
+DEBIAN_FRONTEND=noninteractive apt -yqq install cockpit tuned
 systemctl unmask cockpit
 systemctl enable cockpit
 systemctl start cockpit
@@ -42,6 +51,7 @@ DEBIAN_FRONTEND=noninteractive apt -yqq install interception-tools interception-
 install -m 755 -o root -g root ./usr/bin/hideaway /usr/bin
 install -m 644 -o root -g root ./etc/interception/udevmon.d/config.yaml /etc/interception/udevmon.d
 systemctl restart udevmon
+mv /usr/share/icons/Adwaita/cursors/left_ptr /usr/share/icons/Adwaita/cursors/left_ptr.bak
 echo ""
 echo ""
 
