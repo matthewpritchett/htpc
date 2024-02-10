@@ -8,13 +8,15 @@ function replace_text() {
   sed --in-place "s|$old|$new|g" "$filename"
 }
 
+echo "===================================="
 echo "HTPC Setup Script"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up automatic security updates"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install unattended-upgrades
@@ -23,8 +25,9 @@ dpkg-reconfigure -f noninteractive unattended-upgrades
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up mDNS"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install avahi-daemon
@@ -32,8 +35,9 @@ systemctl enable --now avahi-daemon.service
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up cockpit"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install cockpit tuned
@@ -43,8 +47,9 @@ systemctl start cockpit
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up jellyfin media player"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install cifs-utils wget
@@ -75,20 +80,24 @@ systemctl set-default graphical.target
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up automatic mouse hiding"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install interception-tools interception-tools-compat
 install -m 755 -o root -g root ./usr/bin/hideaway /usr/bin
 install -m 644 -o root -g root ./etc/interception/udevmon.d/config.yaml /etc/interception/udevmon.d
 systemctl restart udevmon
-install -m 644 -o root -g root ./usr/share/icons/transparent/cursors/left_ptr /usr/share/icons/Adwaita/cursors
+mv /usr/share/icons/Adwaita/cursors/left_ptr /usr/share/icons/Adwaita/cursors/left_ptr.bak
+install -m 644 -o root -g root ./usr/share/icons/Adwaita/cursors/transparent /usr/share/icons/Adwaita/cursors
+mv /usr/share/icons/Adwaita/cursors/transparent /usr/share/icons/Adwaita/cursors/left_ptr
 echo ""
 echo ""
 
+echo "===================================="
 echo "Setting up root certificate"
-echo "=================="
+echo "===================================="
 echo ""
 echo ""
 DEBIAN_FRONTEND=noninteractive apt -yqq install wget libnss3-tools
@@ -99,7 +108,7 @@ echo ""
 echo ""
 
 read -n 1 -s -r -p "Press any key to reboot"
-echo "=================="
+echo "===================================="
 echo "Rebooting"
-echo "=================="
+echo "===================================="
 systemctl reboot
