@@ -48,34 +48,6 @@ echo ""
 echo ""
 
 echo "===================================="
-echo "Setting up automatic mouse hiding"
-echo "and remote control mappings"
-echo "===================================="
-echo ""
-echo ""
-DEBIAN_FRONTEND=noninteractive apt -yqq install build-essential cmake libevdev-dev libyaml-cpp-dev interception-tools interception-tools-compat
-echo "Automatic mouse hiding"
-tar --extract --file=./hideaway-v0.1.0.tar.bz2
-pushd ./hideaway-v0.1.0 || exit
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-install -m 755 -o root -g root ./build/hideaway /usr/local/bin
-popd || exit
-echo ""
-echo "Remote control mappings"
-tar --extract --file=./dual-function-keys-1.5.0.tar.bz2
-pushd ./dual-function-keys-1.5.0 || exit
-make
-make install
-install -m 644 -o root -g root ./etc/interception/dual-function-keys/remotecontrol.yaml /etc/interception/dual-function-keys
-popd || exit
-echo ""
-install -m 644 -o root -g root ./etc/interception/udevmon.d/config.yaml /etc/interception/udevmon.d
-systemctl restart udevmon
-echo ""
-echo ""
-
-echo "===================================="
 echo "Setting up jellyfin media player"
 echo "===================================="
 echo ""
@@ -105,6 +77,21 @@ install -m 644 -o root -g root ./etc/pam.d/jellyfinmediaplayer /etc/pam.d
 install -m 644 -o root -g root ./etc/systemd/system/jellyfinmediaplayer.service /etc/systemd/system
 systemctl enable jellyfinmediaplayer.service
 systemctl set-default graphical.target
+echo ""
+echo ""
+
+echo "===================================="
+echo "Setting up automatic mouse hiding"
+echo "===================================="
+echo ""
+echo ""
+DEBIAN_FRONTEND=noninteractive apt -yqq install interception-tools interception-tools-compat
+install -m 755 -o root -g root ./usr/bin/hideaway /usr/bin
+install -m 644 -o root -g root ./etc/interception/udevmon.d/config.yaml /etc/interception/udevmon.d
+systemctl restart udevmon
+mv /usr/share/icons/Adwaita/cursors/left_ptr /usr/share/icons/Adwaita/cursors/left_ptr.bak
+install -m 644 -o root -g root ./usr/share/icons/Adwaita/cursors/transparent /usr/share/icons/Adwaita/cursors
+mv /usr/share/icons/Adwaita/cursors/transparent /usr/share/icons/Adwaita/cursors/left_ptr
 echo ""
 echo ""
 
