@@ -1,0 +1,12 @@
+<keymap>
+    <global>
+        <keyboard>
+            <sleep>Suspend</sleep>
+        </keyboard>
+    </global>
+    <fullscreenvideo>
+        <keyboard>
+            <backspace>Stop</backspace>
+        </keyboard>
+    </fullscreenvideo>
+</keymap>
