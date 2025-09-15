@@ -26,6 +26,15 @@ install -m 755 -o root -g root ./storage/.kodi/userdata/keymaps/custom.xml /stor
 echo ""
 echo ""
 
+echo "===================================="
+echo "Installing Window Redirect Addon"
+echo "===================================="
+echo ""
+echo ""
+unzip ./service.windowredirect-1.0.0.zip -d /storage/.kodi/addons/
+echo ""
+echo ""
+
 read -n 1 -s -r -p "Press any key to reboot"
 echo "===================================="
 echo "Rebooting"
